@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1052204447411",
+    "project_id": "wesend-53f32",
+    "storage_bucket": "wesend-53f32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052204447411:android:d13f513fe11a60d08062c6",
+        "android_client_info": {
+          "package_name": "com.example.gosend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052204447411-49c40r0foirca1t0mnad92jqiped3iej.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gosend",
+            "certificate_hash": "17703ea80756b85fd0d23713b1bf02879a3f7442"
+          }
+        },
+        {
+          "client_id": "1052204447411-oibqgvhhqepfpsnogvl3eiuqnbb4l8ns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCEZnhniUUlnv0YR2GUgfi0c0qu2J_Gc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052204447411-oibqgvhhqepfpsnogvl3eiuqnbb4l8ns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
