@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:wesend/auth/profile_page.dart';
 import 'package:wesend/auth/validator.dart';
 import 'package:wesend/auth/fire_auth.dart';
-import 'package:wesend/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -165,23 +164,6 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 80, bottom: 100),
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Column(children: [
-                              const Text("Belum memiliki akun?",
-                                  style: TextStyle(fontSize: 24)),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return const RegisterPage();
-                                    }));
-                                  },
-                                  child: const Text("Buat Akun Baru",
-                                      style: TextStyle(fontSize: 24)))
-                            ]),
-                          )
                         ],
                       ),
                     )

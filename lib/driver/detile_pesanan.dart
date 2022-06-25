@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wesend/driver/chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wesend/main.dart';
 
 class DetilePesananCust extends StatefulWidget {
-  const DetilePesananCust({Key? key}) : super(key: key);
+  final int index;
+  const DetilePesananCust({Key? key, required this.index}) : super(key: key);
 
   @override
   State<DetilePesananCust> createState() => _DetilePesananCustState();
@@ -11,17 +14,27 @@ class DetilePesananCust extends StatefulWidget {
 class _DetilePesananCustState extends State<DetilePesananCust> {
   final ButtonStyle style = ElevatedButton.styleFrom(
     padding: const EdgeInsets.all(15),
-    textStyle: const TextStyle(fontSize: 24),
+    textStyle: const TextStyle(fontSize: 20),
     primary: const Color.fromARGB(255, 160, 149, 237),
-    fixedSize: const Size.fromWidth(278),
+    fixedSize: const Size.fromWidth(250),
   );
 
+  late int _currentIndex;
+
   var _valGender;
+  var beratBarang;
+
   final List _listGender = [
-    "Driver di perjalanan",
-    "Barang sedang diantar",
-    "Barang sampai"
+    " Driver di perjalanan",
+    " Barang sedang diantar",
+    " Barang sampai"
   ];
+
+  @override
+  void initState() {
+    _currentIndex = widget.index;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,220 +47,290 @@ class _DetilePesananCustState extends State<DetilePesananCust> {
         child: ListView(
           padding: const EdgeInsets.all(15),
           children: [
-            Positioned(
-                top: 10,
-                left: 10,
-                child: Container(
-                    height: 230,
-                    width: 580,
-                    color: const Color.fromARGB(255, 169, 159, 231),
-                    padding: const EdgeInsets.all(20),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          const Text("Data Barang",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)),
-                          Container(
-                            margin: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Container(
-                                  color: Colors.white,
-                                  child: const TextField(
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'Dikirim dari'),
-                                    style: TextStyle(fontSize: 20),
+            StreamBuilder(
+              // Reading Items form our Database Using the StreamBuilder widget
+              stream: db.collection('orders').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // NAH BAGIAN INI BUAT NAMPILIN TO DO NYA
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: 1,
+                  itemBuilder: (context, int _currentIndex) {
+                    DocumentSnapshot documentSnapshot =
+                        snapshot.data.docs[this._currentIndex];
+                    return Column(
+                      children: [
+                        Positioned(
+                            top: 10,
+                            left: 10,
+                            child: Container(
+                                width: 580,
+                                decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        255, 169, 159, 231),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 160, 149, 237),
+                                      width: 2,
+                                    )),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      const Text("Data Barang",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600)),
+                                      const SizedBox(height: 20),
+                                      ListTile(
+                                          textColor: Colors.white,
+                                          iconColor: Colors.white,
+                                          leading: const Icon(
+                                              Icons.location_on_sharp),
+                                          title: const Text('Dikirim Dari',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                          subtitle: Text(
+                                              documentSnapshot['penjemputan'],
+                                              style: const TextStyle(
+                                                  fontSize: 20))),
+                                      const Divider(),
+                                      ListTile(
+                                          textColor: Colors.white,
+                                          iconColor: Colors.white,
+                                          leading:
+                                              const Icon(Icons.monitor_weight),
+                                          title: const Text('Berat Barang',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                          subtitle: Text(
+                                              documentSnapshot['berat_barang']
+                                                      .toString() +
+                                                  ' kg',
+                                              style: const TextStyle(
+                                                  fontSize: 20))),
+                                      const Divider(),
+                                      ListTile(
+                                          textColor: Colors.white,
+                                          iconColor: Colors.white,
+                                          leading:
+                                              const Icon(Icons.monetization_on),
+                                          title: const Text('Biaya',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                          subtitle: Text(
+                                              'Rp. ' +
+                                                  (documentSnapshot[
+                                                              'berat_barang'] *
+                                                          4000)
+                                                      .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 20))),
+                                      const Divider(),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Container(
-                                  color: Colors.white,
-                                  child: const TextField(
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'Alamat tujuan'),
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ))),
-            Text(
-              "\nData diri penerima\n",
-              style: TextStyle(fontSize: 20, color: Colors.grey[600]),
-            ),
-            Positioned(
-                child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(20),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Container(
-                            color: Colors.white,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Nama Lengkap'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Nomor Handphone'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Alamat Lengkap'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Foto Barang'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 100,
-                            child: Column(
-                              children: const [
-                                Text("Foto Barang",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color:
-                                            Color.fromARGB(255, 78, 74, 74))),
-                              ],
-                            ),
-                          ),
-                          const Text(
-                            "Masukan data barang",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 78, 74, 74)),
-                          ),
-                          Container(
-                              height: 250,
-                              width: 580,
-                              color: Colors.white,
-                              padding: const EdgeInsets.all(20),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Expanded(
-                                              child: TextField(
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  labelText:
-                                                      'Berat barang (kg)',
-                                                ),
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: DropdownButton(
-                                                hint: const Text("Pilih status",
-                                                    style: TextStyle(
-                                                        fontSize: 20)),
-                                                value: _valGender,
-                                                items: _listGender.map((value) {
-                                                  return DropdownMenuItem(
-                                                    child: Text(
-                                                      value,
-                                                      style: const TextStyle(
-                                                          fontSize: 20,
-                                                          color: Color.fromARGB(
-                                                              255, 78, 74, 74)),
-                                                    ),
-                                                    value: value,
-                                                  );
-                                                }).toList(),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _valGender =
-                                                        value; //Untuk memberitahu _valGender bahwa isi nya akan diubah sesuai dengan value yang kita pilih
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                ))),
+                        Text(
+                          "\nData diri penerima\n",
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.grey[600]),
+                        ),
+                        ListTile(
+                            leading: const Icon(Icons.person),
+                            title: const Text('Nama',
+                                style: TextStyle(fontSize: 20)),
+                            subtitle: Text(documentSnapshot['penerima'],
+                                style: const TextStyle(fontSize: 20))),
+                        const Divider(),
+                        ListTile(
+                            leading: const Icon(Icons.phone),
+                            title: const Text('Nomor HP',
+                                style: TextStyle(fontSize: 20)),
+                            subtitle: Text(documentSnapshot['no_telepon'],
+                                style: const TextStyle(fontSize: 20))),
+                        const Divider(),
+                        ListTile(
+                            leading: const Icon(Icons.house),
+                            title: const Text('Alamat',
+                                style: TextStyle(fontSize: 20)),
+                            subtitle: Text(documentSnapshot['alamat'],
+                                style: const TextStyle(fontSize: 20))),
+                        const Divider(),
+                        Positioned(
+                            top: 10,
+                            left: 10,
+                            child: Container(
+                                height: 250,
+                                width: 580,
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                padding: const EdgeInsets.all(20),
+                                child: Center(
+                                  child: ListView(
+                                    children: [
+                                      const Text('Masukan data berikut',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Color.fromARGB(
+                                                  255, 100, 95, 95))),
+                                      const SizedBox(
+                                        height: 20,
                                       ),
-                                    ),
-                                    ElevatedButton(
-                                      style: style,
-                                      child: const Text("SIMPAN",
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return const AlertDialog(
-                                                title: Text("Success"),
-                                                content:
-                                                    Text("Saved successfully"),
-                                              );
-                                            });
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () => {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return const Chat();
-                                        }))
-                                      },
-                                      child: const Text("KIRIM PESAN"),
-                                      style: style,
-                                    ),
-                                  ],
-                                ),
-                              ))
-                        ],
-                      ),
-                    ))),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: TextField(
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                labelText: 'Berat barang (kg)',
+                                                hintText: 'Dalam kg',
+                                              ),
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  beratBarang = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 25,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 63,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: const Color.fromARGB(
+                                                        255, 160, 149, 237),
+                                                    width: 1,
+                                                  )),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                  hint: const Text(
+                                                      " Pilih status",
+                                                      style: TextStyle(
+                                                          fontSize: 20)),
+                                                  value: _valGender,
+                                                  items:
+                                                      _listGender.map((value) {
+                                                    return DropdownMenuItem(
+                                                      child: Text(
+                                                        value,
+                                                        style: const TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    78,
+                                                                    74,
+                                                                    74)),
+                                                      ),
+                                                      value: value,
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _valGender =
+                                                          value; //Untuk memberitahu _valGender bahwa isi nya akan diubah sesuai dengan value yang kita pilih
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () => {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const Chat();
+                                              }))
+                                            },
+                                            child: const Text("CHAT PELANGGAN"),
+                                            style: style,
+                                          ),
+                                          ElevatedButton(
+                                            style: style,
+                                            child: const Text("SIMPAN",
+                                                style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 255, 255, 255))),
+                                            onPressed: () {
+                                              if (documentSnapshot[
+                                                      'berat_barang'] ==
+                                                  0) {
+                                                db
+                                                    .collection('orders')
+                                                    .doc(documentSnapshot.id)
+                                                    .update({
+                                                  'berat_barang':
+                                                      int.parse(beratBarang)
+                                                });
+                                              }
+
+                                              db
+                                                  .collection('orders')
+                                                  .doc(documentSnapshot.id)
+                                                  .update(
+                                                      {'status': _valGender});
+
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return const AlertDialog(
+                                                      title: Text("Success"),
+                                                      content: Text(
+                                                          "Saved successfully"),
+                                                    );
+                                                  });
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ))),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wesend/auth/login_page.dart';
-import 'package:wesend/customers/homepage.dart';
-import 'package:wesend/customers/chat.dart';
+import 'package:wesend/driver/homepage.dart';
+// import 'package:wesend/driver/chat.dart';
+import 'package:wesend/chat/chatpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -38,13 +39,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   toHomePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const HomePageCustomer();
+      return const HomePageDriver();
     }));
   }
 
   toChatPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const Chat();
+      return const ChatPage();
     }));
   }
 
