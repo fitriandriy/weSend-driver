@@ -15,7 +15,8 @@ class Camera extends StatelessWidget {
       // Remove the debug banner
       debugShowCheckedModeBanner: false,
       title: 'BUKTI PENGIRIMAN',
-      theme: ThemeData(colorSchemeSeed: Color.fromARGB(255, 196, 190, 233)),
+      theme:
+          ThemeData(colorSchemeSeed: const Color.fromARGB(255, 196, 190, 233)),
       home: const HomePage(),
     );
   }

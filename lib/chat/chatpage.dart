@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wesend/auth/login_page.dart';
 import 'package:wesend/driver/homepage.dart';
@@ -14,8 +13,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final fs = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
-  final TextEditingController message = new TextEditingController();
+  final TextEditingController message = TextEditingController();
 
   int _selectedIndex = 1;
 
@@ -67,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.79,
-                child: messages(
+                child: Messages(
                   email: 'Driver',
                 ),
               ),

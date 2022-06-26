@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class messages extends StatefulWidget {
+class Messages extends StatefulWidget {
   String email;
-  messages({required this.email});
+  Messages({Key? key, required this.email}) : super(key: key);
   @override
   // ignore: no_logic_in_create_state
-  _messagesState createState() => _messagesState(email: email);
+  _MessagesState createState() => _MessagesState(email: email);
 }
 
 // ignore: camel_case_types
-class _messagesState extends State<messages> {
+class _MessagesState extends State<Messages> {
   String email;
-  _messagesState({required this.email});
+  _MessagesState({required this.email});
 
   final Stream<QuerySnapshot> _messageStream = FirebaseFirestore.instance
       .collection('Messages')
@@ -34,7 +34,7 @@ class _messagesState extends State<messages> {
 
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           shrinkWrap: true,
           primary: true,
           itemBuilder: (_, index) {

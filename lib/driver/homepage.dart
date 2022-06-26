@@ -59,16 +59,9 @@ class _HomePageDriverState extends State<HomePageDriver> {
   late DocumentSnapshot documentSnapshot;
   var beratBarang;
   var currentIndex;
-  var _valGender;
-  final List _listGender = [
-    " Driver di perjalanan",
-    " Barang sedang diantar",
-    " Barang sampai"
-  ];
 
   @override
   Widget build(BuildContext context) {
-    var value;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 160, 149, 237),

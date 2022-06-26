@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wesend/driver/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wesend/chat/chatpage.dart';
 import 'package:wesend/main.dart';
 
 class DetilePesananCust extends StatefulWidget {
@@ -277,7 +277,7 @@ class _DetilePesananCustState extends State<DetilePesananCust> {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
-                                                return const Chat();
+                                                return const ChatPage();
                                               }))
                                             },
                                             child: const Text("CHAT PELANGGAN"),
